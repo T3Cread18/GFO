@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grupo Farmacias Ospino - Franquicias</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Google Fonts: Alegreya Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Alegreya Sans', sans-serif;
+            background-color: #FFFFFF;
+        }
+        
+        /* Custom scrollbar using brand colors */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #CEFE46;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #0541A9;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #DF5624;
+        }
+        
+        /* Circle pattern background */
+        .circle-pattern {
+            background-image: radial-gradient(#0541A9 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        
+        /* Cross pattern */
+        .cross-pattern {
+            position: relative;
+        }
+        .cross-pattern::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(to right, #DF5624 1px, transparent 1px),
+                linear-gradient(to bottom, #DF5624 1px, transparent 1px);
+            background-size: 15px 15px;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+    </style>
+    
+    <!-- Tailwind CSS Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'alegreya-sans': ['Alegreya Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        'gfo-orange': '#DF5624',
+                        'gfo-blue': '#0541A9',
+                        'gfo-green': '#CEFE46',
+                        'gfo-white': '#FFFFFF',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="text-gray-800 antialiased cross-pattern">
+
+    <!-- Header with logo -->
+    <header class="bg-gfo-blue shadow-md py-6 sticky top-0 z-10 circle-pattern">
+        <div class="container mx-auto flex flex-col md:flex-row items-center justify-center md:justify-start px-4">
+            <!-- Logo -->
+            <div class="flex items-center mb-4 md:mb-0">
+                <div class="bg-gfo-orange text-white rounded-full w-16 h-16 flex items-center justify-center font-bold text-2xl mr-3">
+                    <img src="icongfo.PNG" alt="Logo" class="w-17 h-17 rounded-lg">
+                </div>
+                <div class="text-white">
+                    <h1 class="text-2xl md:text-3xl font-bold">GRUPO FARMACIAS OSPINO</h1>
+                    <p class="text-sm md:text-base font-medium">POR TU SALUD!</p>
+                </div>
+            </div>
+            
+            <!-- Navigation would go here -->
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-gfo-blue to-gfo-orange text-white py-12 px-4">
+        <div class="container mx-auto text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">NUESTRAS FARMACIAS</h2>
+            <p class="text-xl max-w-2xl mx-auto">Encuentra la farmacia más cercana a ti y descubre nuestro compromiso con tu salud y bienestar.</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container mx-auto p-4 md:p-8">
+        
+        <!-- Values Section -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-gfo-blue mb-6 text-center">NUESTROS VALORES</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Responsibility -->
+                <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-gfo-orange">
+                    <h3 class="text-xl font-bold text-gfo-blue mb-3">Responsabilidad</h3>
+                    <p class="text-gray-700">Creemos en la importancia de retribuir a la comunidad. Estamos comprometidos con prácticas empresariales éticas y sostenibles.</p>
+                </div>
+                
+                <!-- Commitment -->
+                <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-gfo-blue">
+                    <h3 class="text-xl font-bold text-gfo-blue mb-3">Compromiso</h3>
+                    <p class="text-gray-700">Nos comprometemos profundamente con la salud y el bienestar de nuestros clientes y de la comunidad en general.</p>
+                </div>
+                
+                <!-- Trust -->
+                <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-gfo-green">
+                    <h3 class="text-xl font-bold text-gfo-blue mb-3">Confianza</h3>
+                    <p class="text-gray-700">Construimos relaciones sólidas basadas en la confianza mutua, garantizando la confidencialidad de la información personal.</p>
+                </div>
+                
+                <!-- Quality -->
+                <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-gfo-orange">
+                    <h3 class="text-xl font-bold text-gfo-blue mb-3">Calidad</h3>
+                    <p class="text-gray-700">Nos esforzamos por brindar productos y servicios de la más alta calidad en cada una de nuestras transacciones.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Loading Spinner -->
+        <div id="loading-spinner" class="flex justify-center items-center h-64">
+            <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gfo-blue"></div>
+        </div>
+
+        <!-- Error Message -->
+        <div id="error-message" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative text-center" role="alert">
+            <strong class="font-bold">¡Error!</strong>
+            <span class="block sm:inline">No se pudieron cargar las farmacias. Por favor, intenta de nuevo más tarde.</span>
+        </div>
+
+        <!-- Pharmacy Cards Grid -->
+        <div id="pharmacy-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Pharmacy cards will be inserted here by JavaScript -->
+        </div>
+
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-gfo-blue text-white py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="flex items-center">
+                        <div class="bg-gfo-orange text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-xl mr-3">
+                            <img src="icongfo.PNG" alt="Logo" class="w-17 h-17 rounded-lg">
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold">GRUPO FARMACIAS OSPINO</h3>
+                            <p class="text-sm">POR TU SALUD!</p>
+                        </div>
+                    </div>
+                    <p class="mt-4 text-sm">Transmitiendo nuestra esencia como grupo de farmacias.</p>
+                </div>
+                
+                <div class="text-center md:text-right">
+                    <h4 class="font-bold mb-2">SÍGUENOS</h4>
+                    <a href="https://instagram.com/grupo.farmacspino" target="_blank" class="inline-block bg-gfo-orange hover:bg-white hover:text-gfo-orange text-white rounded-full p-2 transition-colors duration-300">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    </a>
+                </div>
+            </div>
+            <div class="border-t border-white border-opacity-20 mt-6 pt-6 text-center text-sm">
+                <p>&copy; 2024 Grupo Farmacias Ospino. Todos los derechos reservados.</p>
+                <p class="mt-2">Creado con ❤️ POR TU SALUD!</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- SUPABASE CONFIGURATION ---
+        const SUPABASE_URL = 'https://wgcptydggietgsdygvuz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndnY3B0eWRnZ2lldGdzZHlndnV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI0MjI2ODQsImV4cCI6MjA2Nzk5ODY4NH0.8ZzRWgJ7-LbzyTWK3OKxqfVinvCPxgGhycl6jLYZsvg';
+
+        // Initialize the Supabase client
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // --- DOM ELEMENTS ---
+        const pharmacyGrid = document.getElementById('pharmacy-grid');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const errorMessage = document.getElementById('error-message');
+
+        /**
+         * Fetches pharmacy data from the Supabase 'pharmacy' table.
+         * @returns {Promise<Array>} A promise that resolves to an array of pharmacy objects.
+         */
+        async function fetchPharmacies() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('pharmacy')
+                    .select('*');
+
+                if (error) throw error;
+                
+                loadingSpinner.style.display = 'none';
+                return data;
+
+            } catch (error) {
+                console.error('Error fetching pharmacies:', error.message);
+                loadingSpinner.style.display = 'none';
+                errorMessage.classList.remove('hidden');
+                return [];
+            }
+        }
+
+        /**
+         * Creates an HTML card for a single pharmacy.
+         * @param {object} pharmacy - The pharmacy data object from Supabase.
+         * @returns {string} The HTML string for the pharmacy card.
+         */
+        function createPharmacyCard(pharmacy) {
+            const fullAddress = `${pharmacy.address}, ${pharmacy.city}, ${pharmacy.state}.`;
+            const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${pharmacy.latitud},${pharmacy.longitud}`;
+            const whatsappUrl = `https://wa.me/${pharmacy.phone}`;
+
+            return `
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300 ease-in-out flex flex-col border border-gray-200">
+                    <div class="p-6 flex-grow">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-gfo-orange text-white rounded-full w-10 h-10 flex items-center justify-center font-bold text-sm mr-3">
+                                 <img src="icongfo.PNG" alt="Logo" class="w-17 h-17 rounded-lg">
+                            </div>
+                            <h2 class="text-xl font-bold text-gfo-blue">${pharmacy.name}</h2>
+                        </div>
+                        <p class="text-gray-600 mb-4">${pharmacy.description || 'Descripción no disponible.'}</p>
+                        <div class="flex items-start text-sm text-gray-700">
+                            <svg class="w-5 h-5 mr-2 text-gfo-orange flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            <span>${fullAddress}</span>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-gray-50 border-t border-gray-200 grid grid-cols-2 gap-3">
+                        <a href="${whatsappUrl}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center bg-gfo-green hover:bg-green-600 text-gfo-blue font-bold py-2 px-4 rounded-lg transition-colors duration-300">
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99 0-3.902-.539-5.587-1.52l-6.19 1.669zm4.893-6.48c-.27-.136-.994-.492-1.148-.548-.154-.055-.267-.082-.38-.082-.112 0-.224.028-.336.136-.112.108-.426.416-.523.523-.098.108-.196.122-.336.082-.14-.04-.596-.218-1.136-.694-.418-.355-.694-.623-.834-.834-.14-.211-.07-.328.04-.436.098-.096.21-.25.318-.38.108-.13.148-.21.222-.358.074-.148.036-.28-.004-.368-.04-.088-.38-.912-.522-1.246-.142-.336-.282-.29-.38-.29-.098 0-.21.004-.318.004s-.266.04-.394.21c-.128.17-.494.482-.494 1.188s.506 1.379.574 1.486c.068.108 1.004 1.523 2.447 2.163 1.442.64 1.804.514 2.132.486.328-.028.994-.404 1.134-.792.14-.388.14-.72.098-.792-.04-.072-.154-.122-.336-.21z"></path></svg>
+                            WhatsApp
+                        </a>
+                        <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center bg-gfo-orange hover:bg-orange-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300">
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"></path></svg>
+                            Ubicación
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+
+        /**
+         * Main function to fetch and display all pharmacies.
+         */
+        async function displayPharmacies() {
+            const pharmacies = await fetchPharmacies();
+            
+            if (pharmacies && pharmacies.length > 0) {
+                pharmacyGrid.innerHTML = pharmacies.map(createPharmacyCard).join('');
+            } else if (!errorMessage.classList.contains('hidden')) {
+                // Error already shown
+            } else {
+                loadingSpinner.style.display = 'none';
+                pharmacyGrid.innerHTML = `
+                    <div class="col-span-full text-center p-8 bg-white rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold text-gray-700">No se encontraron farmacias</h3>
+                        <p class="text-gray-500 mt-2">Actualmente no hay franquicias registradas. Por favor, vuelve a consultar más tarde.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', displayPharmacies);
+    </script>
+</body>
+</html>
