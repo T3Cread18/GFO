@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grupo Farmacias Ospino - Ofertas</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="src\components\header\header-component.js"></script>
+    <!-- Google Fonts: Alegreya Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Alegreya Sans', sans-serif;
+            background-color: #f8f4f0; /* Fondo más suave */
+        }
+        
+        .product-card {
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.8);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .offer-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #DF5624;
+            color: white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(223, 86, 36, 0.5);
+        }
+    </style>
+    
+    <!-- Tailwind CSS Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'alegreya-sans': ['Alegreya Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        'gfo-orange': '#DF5624',
+                        'gfo-blue': '#0541A9',
+                        'gfo-green': '#CEFE46',
+                        'gfo-white': '#FFFFFF',
+                        'gfo-light': '#f8f4f0'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gfo-light">
+
+    <!-- Header (igual que en tu página principal) -->
+    <header-component></header-component>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-gfo-blue to-gfo-orange text-white py-16 px-4">
+        <div class="container mx-auto text-center">
+            <h2 class="text-4xl md:text-5xl font-bold mb-4">OFERTAS ESPECIALES</h2>
+            <p class="text-xl md:text-2xl max-w-3xl mx-auto">Descubre nuestros productos con descuentos exclusivos para tu salud y bienestar.</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-12">
+        <!-- Category Filter -->
+        <div class="mb-12">
+            <h3 class="text-xl font-semibold text-gfo-blue mb-4">Filtrar por categoría:</h3>
+            <div id="category-filters" class="flex flex-wrap gap-3">
+                <!-- Las categorías se cargarán dinámicamente -->
+            </div>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div id="loading-spinner" class="flex justify-center items-center h-64">
+            <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gfo-blue"></div>
+        </div>
+
+        <!-- Products Grid -->
+        <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            <!-- Los productos se cargarán aquí -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="hidden text-center py-12">
+            <div class="max-w-md mx-auto">
+                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <h3 class="mt-2 text-lg font-medium text-gray-900">No hay ofertas disponibles</h3>
+                <p class="mt-1 text-gray-500">Actualmente no tenemos productos en oferta. Vuelve a revisar más tarde.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer (igual que en tu página principal) -->
+    <footer class="bg-gfo-blue text-white py-8 mt-12">
+        <!-- ... mismo footer que ya tienes ... -->
+    </footer>
+
+    <script>
+        // --- SUPABASE CONFIGURATION ---
+        const SUPABASE_URL = 'https://wgcptydggietgsdygvuz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndnY3B0eWRnZ2lldGdzZHlndnV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI0MjI2ODQsImV4cCI6MjA2Nzk5ODY4NH0.8ZzRWgJ7-LbzyTWK3OKxqfVinvCPxgGhycl6jLYZsvg';
+
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // DOM Elements
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const productsGrid = document.getElementById('products-grid');
+        const emptyState = document.getElementById('empty-state');
+        const categoryFilters = document.getElementById('category-filters');
+
+        // Fetch products with offers
+        async function fetchProducts(categoryId = null) {
+            try {
+                let query = supabaseClient
+                    .from('products')
+                    .select('*, category:category_id(*)')
+                    .eq('is_offert', true);
+
+                if (categoryId) {
+                    query = query.eq('category_id', categoryId);
+                }
+
+                const { data, error } = await query;
+
+                if (error) throw error;
+                
+                return data;
+            } catch (error) {
+                console.error('Error fetching products:', error.message);
+                return [];
+            }
+        }
+
+        // Fetch categories
+        async function fetchCategories() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('category')
+                    .select('*');
+
+                if (error) throw error;
+                return data;
+            } catch (error) {
+                console.error('Error fetching categories:', error.message);
+                return [];
+            }
+        }
+
+        // Create product card
+        function createProductCard(product) {
+            // Formatear precio con separador de miles
+            const formattedPrice = new Intl.NumberFormat('es-VE', {
+                style: 'currency',
+                currency: 'VES'
+            }).format(product.price);
+
+            return `
+                <div class="product-card relative rounded-xl overflow-hidden shadow-md border border-gray-100">
+                    <div class="offer-badge">OFERTA</div>
+                    
+                    <!-- Product Image -->
+                    <div class="h-48 bg-white flex items-center justify-center p-4">
+                        <img src="${product.img}" alt="${product.name}" 
+                             class="max-h-full max-w-full object-contain" 
+                             onerror="this.src='https://via.placeholder.com/300?text=Imagen+no+disponible'">
+                    </div>
+                    
+                    <!-- Product Info -->
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-lg font-bold text-gfo-blue">${product.name}</h3>
+                            <span class="bg-gfo-green text-gfo-blue px-2 py-1 rounded text-sm font-bold">${product.category?.name || 'General'}</span>
+                        </div>
+                        
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-2">${product.description || 'Descripción no disponible'}</p>
+                        
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-gfo-orange">${formattedPrice}</span>
+                            <button class="bg-gfo-blue hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">
+                                Ver más
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Create category filter button
+        function createCategoryFilter(category, isActive = false) {
+            return `
+                <button class="category-filter px-4 py-2 rounded-full ${isActive ? 'bg-gfo-orange text-white' : 'bg-white text-gfo-blue border border-gfo-blue'}" 
+                        data-category-id="${category.id}">
+                    ${category.name}
+                </button>
+            `;
+        }
+
+        // Display products
+        async function displayProducts(categoryId = null) {
+            loadingSpinner.classList.remove('hidden');
+            productsGrid.innerHTML = '';
+            
+            const products = await fetchProducts(categoryId);
+            
+            loadingSpinner.classList.add('hidden');
+            
+            if (products.length === 0) {
+                emptyState.classList.remove('hidden');
+                return;
+            }
+            
+            emptyState.classList.add('hidden');
+            productsGrid.innerHTML = products.map(createProductCard).join('');
+        }
+
+        // Display categories
+        async function displayCategories() {
+            const categories = await fetchCategories();
+            
+            // Add "All" option
+            categoryFilters.innerHTML = `
+                <button class="category-filter px-4 py-2 rounded-full bg-gfo-orange text-white" data-category-id="all">
+                    Todas
+                </button>
+            `;
+            
+            // Add other categories
+            categories.forEach(category => {
+                categoryFilters.innerHTML += createCategoryFilter(category);
+            });
+            
+            // Add event listeners
+            document.querySelectorAll('.category-filter').forEach(button => {
+                button.addEventListener('click', function() {
+                    // Update active state
+                    document.querySelectorAll('.category-filter').forEach(btn => {
+                        btn.classList.remove('bg-gfo-orange', 'text-white');
+                        btn.classList.add('bg-white', 'text-gfo-blue', 'border');
+                    });
+                    
+                    this.classList.remove('bg-white', 'text-gfo-blue', 'border');
+                    this.classList.add('bg-gfo-orange', 'text-white');
+                    
+                    // Filter products
+                    const categoryId = this.dataset.categoryId;
+                    if (categoryId === 'all') {
+                        displayProducts();
+                    } else {
+                        displayProducts(categoryId);
+                    }
+                });
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async () => {
+            await displayCategories();
+            await displayProducts();
+        });
+    </script>
+</body>
+</html>
