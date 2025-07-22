@@ -32,11 +32,11 @@ class HeaderComponent extends HTMLElement {
   
               <div id="menu-dropdown" class="hidden absolute right-0 mt-2 w-56 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none transition ease-out duration-100 transform opacity-0 scale-95">
                 <div class="py-1" role="none">
-                  <a href="/" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">Sedes</a>
-                  <a href="/ofertas" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">Ofertas</a>
-                  <a href="/about" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">Sobre Nosotros</a>
+                  <a href="/src/templates/pages/index.html" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">Sedes</a>
+                  <a href="/src/templates/pages/ofertas" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">Ofertas</a>
+                  <a href="/src/templates/pages/about.html" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">Sobre Nosotros</a>
                   <div class="border-t border-gray-200 my-1"></div>
-                  <a href="/admin" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">Admin</a>
+                  <a href="/src/templates/pages/admin" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">Admin</a>
                 </div>
               </div>
             </div>
