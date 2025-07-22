@@ -1,6 +1,6 @@
 {
     "rewrites": [
-      { "source": "/", "destination": "/src/templates/pages/index.html" },
+      { "source": "/", "destination": "index.html" },
       { "source": "/ofertas", "destination": "/src/templates/pages/ofertas.html" },
       { "source": "/about", "destination": "/src/templates/pages/about.html" },
       { "source": "/admin", "destination": "/src/templates/pages/admin.html" }
